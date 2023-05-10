@@ -1,6 +1,7 @@
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 {% load static %}
+{% load menu_tags %}
 
 
 <header class="main-header">
@@ -29,15 +30,11 @@
                 </li>
                 <li>
                     <a href="#">Portfolio </a>
-                    <!--second level -->
                     <ul>
-                        <li><a href="{% slugurl 'advertising' %}">Advertising</a></li>
-                        <li><a href="{% slugurl 'landscapes' %}">Landscape</a></li>
-                        <li><a href="{% slugurl 'products' %}">Product</a></li>
-                        <li><a href="{% slugurl 'documentary' %}">Documentary</a></li>
-                        <li><a href="{% slugurl 'tearsheeting' %}">Tear Sheeting</a></li>
+                        {% for item in menu_items %}
+                        <li><a href="{{ item.href }}"> {{ item.text }}</a></li>
+                        {% endfor %}
                     </ul>
-                    <!--second level end-->
                 </li>
                 <li>
                     <a href="{% url 'wagtailadmin_home' %}">Customers</a>
