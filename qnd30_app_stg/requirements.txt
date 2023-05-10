@@ -46,6 +46,4 @@ python-dotenv==0.21.0
 #Ecommerce
 braintree
 weasyprint
-django-memcache-status
-django-braces
-memcache
+wagtailmenus

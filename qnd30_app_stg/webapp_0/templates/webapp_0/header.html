@@ -2,6 +2,8 @@
 {% load wagtailimages_tags %}
 {% load social_share %}
 {% load static %}
+{% load menu_tags %}
+
 
 
 <header class="main-header">
@@ -33,11 +35,9 @@
                     <a href="#">Portfolio </a>
                     <!--second level -->
                     <ul>
-                        <li><a href="{% slugurl 'advertising' %}">Advertising</a></li>
-                        <li><a href="{% slugurl 'landscapes' %}">Landscape</a></li>
-                        <li><a href="{% slugurl 'products' %}">Product</a></li>
-                        <li><a href="{% slugurl 'documentary' %}">Documentary</a></li>
-                        <li><a href="{% slugurl 'tearsheeting' %}">Tear Sheeting</a></li>
+                        {% load menu_tags %}
+                        <li><a href="{{ item.href }}"> {{ item.text }}</a></li>
+                        {% endfor %}
                     </ul>
                     <!--second level end-->
                 </li>
