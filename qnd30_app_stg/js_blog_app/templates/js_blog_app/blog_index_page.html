@@ -1,0 +1,94 @@
+{% extends "webapp_0/base.html" %}
+
+{% load wagtailimages_tags wagtailcore_tags %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load widget_tweaks %}
+{% load static %}
+{% load menu_tags %}
+
+
+{% block content %}
+{% main_menu template="webapp_0/header.html" %}
+<div class="content">
+    <!-- column-image  -->	
+    <div class="column-image">
+        {% image page.image fill-250x250 as portada %}
+        <div class="bg"  data-bg="{{ portada.url }}"></div>
+        <div class="overlay"></div>
+        <div class="column-title">
+            <h2> {{ page.title_ini | richtext  }} </h2>
+            <h3>{{ page.subtitle_ini | richtext }}</h3>
+            <p>Juan Silva</p>
+        </div>
+
+        <div class="fixed-column-dec"></div>
+    </div>
+    <!-- column-image end  -->	
+    <!-- column-wrapper -->	
+    <div class="column-wrapper  single-content-section">
+        <!-- fixed-bottom-content-->	
+        <div class="fixed-bottom-content">
+            <!-- pagination   -->
+            <div class="pagination-container fl-wrap">
+                <a href="#" class="prevposts-link"><i class="fal fa-chevron-left"></i></a>
+                <a href="#">1</a>
+                <a href="#" class="current-page">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+                <a href="#" class="nextposts-link"><i class="fal fa-chevron-right"></i></a>
+            </div>
+            <!-- pagination  end -->
+        </div>
+        <h1>{{ page.title }}</h1>
+        <div class="intro">{{ page.intro|richtext }}</div>
+        <!-- fixed-bottom-content end -->	
+        <!--section  -->	
+        <section class="single-content-section">
+            <div class="container small-container">
+                {% for post in blogpages %}
+                <div class="post fl-wrap fw-post">
+                    <h2><span>{{ post.title }}</span></h2>
+                    <ul class="blog-title-opt">
+                        <li><a href="#">{{ post.specific.date }}</a></li>
+                        <li> - </li>
+                        <li><a href="#">Interviews </a></li>
+                        <li><a href="#">Design</a></li>
+                    </ul>
+                    <!-- blog media -->
+                    <div class="blog-media fl-wrap">
+                        {% image page.image fill-250x250 as portada %}
+                        <img src="{{ portada.url }}" class="respimg" alt="">
+                    </div>
+                    <!-- blog media end -->
+                    <div class="blog-text fl-wrap">
+                        <div class="pr-tags fl-wrap">
+                            <span>Tags : </span>
+                            <ul>
+                                <li><a href="#">Design</a></li>
+                                <li><a href="#">Photography</a></li>
+                                <li><a href="#">Fasion</a></li>
+                            </ul>
+                        </div>
+                        <p>
+                            Vestibulum orci felis, ullamcorper non condimentum non, ultrices ac nunc. Mauris non ligula suscipit, vulputate mi accumsan, dapibus felis. Nullam sed sapien dui. Nulla auctor sit amet sem non porta. Praesent eu massa vel diam laoreet elementum ac sed felis. Donec suscipit ultricies risus sed mollis. Donec volutpat porta risus posuere imperdiet. Sed viverra dolor sed dolor placerat ornare ut . Integer iaculis tellus nulla, quis imperdiet magna venenatis vitae..
+                        </p>
+                        <a href="{% pageurl post %}" class="btn float-btn flat-btn">Read more </a>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </section>
+
+    </div>
+    <!-- column-wrapper -->	
+</div>
+<!--content end-->	
+<!--share-wrapper-->
+<div class="share-wrapper">
+    <div class="share-container fl-wrap  isShare"></div>
+</div>
+ 
+ 
+{% endblock %}

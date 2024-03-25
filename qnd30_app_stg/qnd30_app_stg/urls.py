@@ -36,7 +36,6 @@ urlpatterns = [
     #path('api/', include('courses.api.urls', namespace='api')),
     #path('social-auth/', include('social_django.urls', namespace='social')),
     
-     
     re_path(r'^smartbusinessmedia/', include(wagtailadmin_urls),name='wagtail'),
     re_path(r'^documents/', include(wagtaildocs_urls)),
     re_path(r'', include(wagtail_urls)),

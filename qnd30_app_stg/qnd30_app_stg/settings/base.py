@@ -42,6 +42,8 @@ ALLOWED_HOSTS = ['*']
 #     ALLOWED_HOSTS = [ ENV_ALLOWED_HOST ]
 
 
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -59,8 +61,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django_comments',
     #Wagtail Inicials
     'core',
+    'wagtail',
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.embeds',
@@ -72,16 +77,17 @@ INSTALLED_APPS = [
     'wagtail.search',
 
     'wagtail.admin',
-    'wagtail.core',
+    #'wagtail.core',
     'wagtail.contrib.settings',
     'wagtail.contrib.routable_page',
-    'wagtail.contrib.modeladmin',
+    #'wagtail.contrib.modeladmin',
     'wagalytics',
     'wagtailfontawesome',
     'wagtailgmaps',
     'wagtailmenus',
     'django_social_share',
     'taggit',
+    'js_blog_app',
     'webapp_0',
     'streams',
     'widget_tweaks',
@@ -110,12 +116,14 @@ INSTALLED_APPS = [
     #'memcache_status',
     'rest_framework',
     'ckeditor',
+   
 ]
 
 
 
 
 MIDDLEWARE = [
+    'django.contrib.sites.middleware.CurrentSiteMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     #'django.middleware.cache.UpdateCacheMiddleware',
@@ -125,7 +133,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'wagtail.core.middleware.SiteMiddleware',
+    'django.contrib.sites.middleware.CurrentSiteMiddleware',
+    #'wagtail.middleware.SiteMiddleware',
     #'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
@@ -138,7 +147,7 @@ WAGTAILSEARCH_BACKENDS = {
         'BACKEND': 'wagtail.search.backends.database',
     }
 }
-
+SITE_ID = 1
 #WagtailAnalitycs
 GA_KEY_CONTENT = os.environ.get('GA_KEY_CONTENT_ENV')
 GA_VIEW_ID = os.environ.get('GA_VIEW_ID_ENV')

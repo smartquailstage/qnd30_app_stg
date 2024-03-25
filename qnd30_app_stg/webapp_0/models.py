@@ -7,7 +7,7 @@ from modelcluster.fields import ParentalKey
 from modelcluster.tags import ClusterTaggableManager
 from taggit.models import Tag as TaggitTag
 from taggit.models import TaggedItemBase
-from wagtail.admin.edit_handlers import (
+from wagtail.admin.panels import (
     FieldPanel,
     FieldRowPanel,
     InlinePanel,
@@ -30,6 +30,7 @@ from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.contrib.forms.edit_handlers import FormSubmissionsPanel
 from wagtail.contrib.settings.models import BaseSetting, register_setting
+from wagtail.core import blocks
 
 
 
@@ -502,152 +503,6 @@ class GaleriadeImagenes2(Orderable):
         ImageChooserPanel('image_60'),
         
     ]
-
-TAGS= ( 
-    ("advertising", "advertising"), 
-    ("product", "product"), 
-    ("tearsheeting", "tearsheting"), 
-    ("landscape", "landscape"), 
-    ("documentary", "documentary"),
-)
-
-class comments_NewsDetailPage(AbstractFormField):
-    page = ParentalKey('NewsDetailPage', on_delete=models.CASCADE, related_name='form_fields')
-
-class NewsDetailPage(AbstractEmailForm):
-    template = "webapp_0/news_detail_page.html"
-    custom_title = models.CharField(max_length=100,blank=True,null=True,help_text="Titulo de la publicacion ")
-    news_image = models.ForeignKey("wagtailimages.Image", blank=False,null=True,related_name="+", on_delete = models.SET_NULL )
-    Fecha = models.DateTimeField(null=True)
-    tag = models.CharField(max_length=100, choices = TAGS, null=True)
-    agency = models.CharField(max_length=100,blank=True,null=True,help_text="Nombre de Agencia ")
-    author = models.CharField(max_length=100,blank=True,null=True,help_text="Nombre del Author ")
-    quote = models.CharField(max_length=100,blank=True,null=True,help_text="frase")
-    resena = models.CharField(max_length=100,blank=True,null=True,help_text="Una resena de la produccion")
-    content  = StreamField(
-    [
-    ("title_and_text", blocks.TitleAndTextBlock()),
-    ("full_richtext", blocks.RichtextBlock()),
-    ("simple_richtext", blocks.SimpleRichtextBlock()),
-    ("cards", blocks.CardBlock()),
-    ],null = True, blank=True,
-    )
-    comments = RichTextField(blank=True,verbose_name='Mensaje para que nos dejen un comentario')
-    thank_you_text = RichTextField(blank=True)
-
-    content_panels = Page.content_panels + [
-        FieldPanel("custom_title"),
-        FieldPanel("author"),
-        FieldPanel("Fecha"),
-        FieldPanel("tag"),
-        FieldPanel("agency"),
-        FieldPanel("quote"),
-        FieldPanel("resena"),
-        ImageChooserPanel("news_image"),
-        InlinePanel('galleria_News', label="Imagenes Shooting Now"),
-        StreamFieldPanel("content"),
-        FormSubmissionsPanel(),
-        InlinePanel('form_fields', label="comments"),
-        FieldPanel('thank_you_text', classname="full"),
-        MultiFieldPanel([
-            FieldRowPanel([
-                FieldPanel('from_address', classname="col6"),
-                FieldPanel('to_address', classname="col6"),
-            ]),
-            FieldPanel('subject'),
-        ], "Email"),
-    ]
-
-    def get_form_fields(self):
-        return self.form_fields.all()
-
-    def get_data_fields(self):
-        data_fields = [
-            ('name', 'Name'),
-        ]
-        data_fields += super().get_data_fields()
-
-        return data_fields
-
-    def get_context(self, request, *args, **kwargs):
-        context = super().get_context(request, *args, **kwargs)
-
-        # If you need to show results only on landing page,
-        # you may need check request.method
-
-        results = dict()
-        # Get information about form fields
-        data_fields = [
-            (field.clean_name, field.label)
-            for field in self.get_form_fields()
-        ]
-
-        # Get all submissions for current page
-        submissions = self.get_submission_class().objects.filter(page=self)
-        for submission in submissions:
-            data = submission.get_data()
-
-            # Count results for each question
-            for name, label in data_fields:
-                answer = data.get(name)
-                if answer is None:
-                    # Something wrong with data.
-                    # Probably you have changed questions
-                    # and now we are receiving answers for old questions.
-                    # Just skip them.
-                    continue
-
-                if type(answer) is list:
-                    # Answer is a list if the field type is 'Checkboxes'
-                    answer = u', '.join(answer)
-
-                question_stats = results.get(label, {})
-                question_stats[answer] = question_stats.get(answer, 0) + 1
-                results[label] = question_stats
-
-        context.update({
-            'results': results,
-        })
-        return context
-        
-
-class GaleriadeImagenes_News(Orderable):
-    page = ParentalKey(NewsDetailPage, on_delete=models.CASCADE, related_name='galleria_News')
-    logo = models.ForeignKey('wagtailimages.Image',null=True,blank=True,on_delete=models.SET_NULL,related_name='+',verbose_name='Logotipo de Juan Silva Photo')
-    
-    image = models.ForeignKey('wagtailimages.Image',null=True,blank=True,on_delete=models.SET_NULL,related_name='+',verbose_name='foto 1')
-    image_2 = models.ForeignKey('wagtailimages.Image',null=True,blank=True,on_delete=models.SET_NULL,related_name='+',verbose_name='foto 2')
-    image_3 = models.ForeignKey('wagtailimages.Image',null=True,blank=True,on_delete=models.SET_NULL,related_name='+',verbose_name='foto 3')
-    
-    
-    # Imagenes Thumb Portfolio
-    
-    image_4 = models.ForeignKey('wagtailimages.Image',null=True,blank=True,on_delete=models.SET_NULL,related_name='+',verbose_name='foto 4')
-    image_5 = models.ForeignKey('wagtailimages.Image',null=True,blank=True,on_delete=models.SET_NULL,related_name='+',verbose_name='foto 5')
-    image_6 = models.ForeignKey('wagtailimages.Image',null=True,blank=True,on_delete=models.SET_NULL,related_name='+',verbose_name='foto 6')
-    image_7 = models.ForeignKey('wagtailimages.Image',null=True,blank=True,on_delete=models.SET_NULL,related_name='+',verbose_name='foto 7')
-
-    # Fotos TearSheate
-    image_8 = models.ForeignKey('wagtailimages.Image',null=True,blank=True,on_delete=models.SET_NULL,related_name='+',verbose_name='foto 8')
-    image_9 = models.ForeignKey('wagtailimages.Image',null=True,blank=True,on_delete=models.SET_NULL,related_name='+',verbose_name='foto 9')
-    image_10 = models.ForeignKey('wagtailimages.Image',null=True,blank=True,on_delete=models.SET_NULL,related_name='+',verbose_name='foto 10')
-
-    panels = [
-        ImageChooserPanel('logo'),
-        ImageChooserPanel('image'),
-        ImageChooserPanel('image_2'),
-        ImageChooserPanel('image_3'),
-        ImageChooserPanel('image_4'),
-        ImageChooserPanel('image_5'),
-        ImageChooserPanel('image_6'),
-        ImageChooserPanel('image_7'),
-        ImageChooserPanel('image_8'),
-        ImageChooserPanel('image_9'),
-        ImageChooserPanel('image_10')
-    ]
-    
-   
-
 
 
 
