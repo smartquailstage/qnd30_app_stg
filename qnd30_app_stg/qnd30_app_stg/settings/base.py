@@ -87,7 +87,7 @@ INSTALLED_APPS = [
     'wagtailmenus',
     'django_social_share',
     'taggit',
-    'js_blog_app',
+    
     'webapp_0',
     'streams',
     'widget_tweaks',
@@ -112,10 +112,12 @@ INSTALLED_APPS = [
     'qr_code',
     'storages',
     #'actions',
-    'baton.autodiscover',   
+       
     #'memcache_status',
     'rest_framework',
     'ckeditor',
+    'js_blog_app',
+    'baton.autodiscover',
    
 ]
 
@@ -135,7 +137,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware',
     #'wagtail.core.middleware.SiteMiddleware',
-    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+    #'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
 ROOT_URLCONF = 'qnd30_app_stg.urls'
@@ -147,7 +149,7 @@ WAGTAILSEARCH_BACKENDS = {
         'BACKEND': 'wagtail.search.backends.database',
     }
 }
-SITE_ID = 1
+#SITE_ID = 1
 #WagtailAnalitycs
 GA_KEY_CONTENT = os.environ.get('GA_KEY_CONTENT_ENV')
 GA_VIEW_ID = os.environ.get('GA_VIEW_ID_ENV')
