@@ -2,11 +2,12 @@ from django.db import models
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
 from wagtail.images.edit_handlers import ImageChooserPanel
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel
 from wagtail.core.fields import StreamField
 from wagtail.core import blocks
-from wagtail.admin.edit_handlers import StreamFieldPanel
 from wagtail.embeds.blocks import EmbedBlock
+from taggit.models import TaggedItemBase
+from taggit.managers import TaggableManager
 
 
 class BlogIndexPage(Page):
@@ -24,6 +25,7 @@ class BlogIndexPage(Page):
     content_panels = Page.content_panels + [
         FieldPanel('title_ini', classname="full"),
         FieldPanel('intro', classname="full"),
+        FieldPanel('subtitle_ini', classname="full"),
         ImageChooserPanel('image')
     ]
 
@@ -36,8 +38,17 @@ class BlogIndexPage(Page):
         return context
 
 
+class BlogPageTag(TaggedItemBase):
+    content_object = models.ForeignKey('BlogPage', on_delete=models.CASCADE, related_name='tagged_items')
+
 
 class BlogPage(Page):
+    image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
     date = models.DateField("Post date")
     intro = models.CharField(max_length=250)
     body = StreamField([
@@ -45,9 +56,13 @@ class BlogPage(Page):
         ('paragraph', blocks.RichTextBlock(icon="pilcrow")),
         ('embed', EmbedBlock(icon="media")),
     ])
+    tags = TaggableManager(through=BlogPageTag, blank=True)
+
 
     content_panels = Page.content_panels + [
         FieldPanel('date'),
-        FieldPanel('intro'),
-        StreamFieldPanel('body')
+        FieldPanel('intro',classname="full" ),
+        FieldPanel('image'),
+        StreamFieldPanel('body'),
+        FieldPanel('tags'),
     ]
