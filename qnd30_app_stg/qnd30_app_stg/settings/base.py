@@ -61,7 +61,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
+   # 'django.contrib.sites',
     #'django_comments',
     #Wagtail Inicials
     'core',
@@ -123,7 +123,7 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
-    'django.contrib.sites.middleware.CurrentSiteMiddleware',
+    #'django.contrib.sites.middleware.CurrentSiteMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     #'django.middleware.cache.UpdateCacheMiddleware',
@@ -134,8 +134,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware',
-    #'wagtail.middleware.SiteMiddleware',
-    #'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+    'wagtail.core.middleware.SiteMiddleware',
+    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
 ROOT_URLCONF = 'qnd30_app_stg.urls'
