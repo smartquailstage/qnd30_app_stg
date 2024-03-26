@@ -191,10 +191,7 @@ class Index(AbstractEmailForm):
         FieldPanel("custom_title"),
     ]
 
-    def get_context(self, request, *args, **kwargs):
-        context = super().get_context(request, *args, **kwargs)
-        context["posts"] = NewsDetailPage.objects.live().public()
-        return context
+
         
 
 class GaleriadeImagenes(Orderable):
